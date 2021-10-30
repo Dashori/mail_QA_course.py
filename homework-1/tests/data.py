@@ -8,5 +8,5 @@ DASHBOARD_URL = 'https://target.my.com/dashboard'
 NAME = 'Chepigo Darya Stanislavovna'
 TELEPHONE = '89630812730'
 
-STATISTIC_URL = 'https://target.my.com/statistics/summary'
+STATISTIC_URL = 'https://target.my.com/statistics'
 PRO_URL = 'https://target.my.com/pro'
