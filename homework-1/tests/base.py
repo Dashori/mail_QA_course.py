@@ -18,26 +18,23 @@ class BaseCase:
 
     def wait(self, delay=None):
         if delay is None:
-            delay = 50
+            delay = 60
         return WebDriverWait(self.driver, timeout=delay)
 
     def find(self, locator, delay=50):
-        return self.wait(delay).until(ec.element_to_be_clickable(locator))
+        return self.wait(delay).until(ec.visibility_of_element_located(locator))
 
-    def login_element(self, elem, query):
-        element = self.find(elem)
+    def search(self, query):
+        search = self.find(query)
+        return search
+
+    def send_element(self, locator: tuple, query: str, is_clear: bool = False):
+        element = self.find(locator)
+        if is_clear:
+            element.clear()
         element.send_keys(query)
 
-    def login_password(self, elem, query):
-        password = self.find(elem)
-        password.send_keys(query)
-
-    def send_element(self, elem, query):
-        element = self.find(elem)
-        element.clear()
-        element.send_keys(query)
-
-    def click(self, locator, delay=50):
+    def click(self, locator, delay=60):
         CLICK_RETRY = 5
         for i in range(CLICK_RETRY):
             try:
@@ -45,18 +42,14 @@ class BaseCase:
                 elem = self.wait(delay).until(ec.element_to_be_clickable(locator))
                 elem.click()
                 return
-            except StaleElementReferenceException:
+            except StaleElementReferenceException or TimeoutException:
                 if i == CLICK_RETRY-1:
                     raise
-            except TimeoutException:
-                if i == CLICK_RETRY-1:
-                    raise
-                self.find(elem).click()
 
     def login(self, log, passw):
         self.click(basic_locators.LOGIN_LOCATOR)
-        self.login_element(basic_locators.EMAIL_LOCATOR, log)
-        self.login_element(basic_locators.PASSWORD_LOCATOR, passw)
+        self.send_element(basic_locators.EMAIL_LOCATOR, log)
+        self.send_element(basic_locators.PASSWORD_LOCATOR, passw)
         self.click(basic_locators.ENTER_LOGIN_LOCATOR)
 
     def logout(self):
@@ -65,6 +58,6 @@ class BaseCase:
 
     def profile(self, name, teleph):
         self.click(basic_locators.PROFILE_LOCATION)
-        self.send_element(basic_locators.NAME_LOCATION, name)
-        self.send_element(basic_locators.TELEPHONE_LOCATION, teleph)
+        self.send_element(basic_locators.NAME_LOCATION, name, True)
+        self.send_element(basic_locators.TELEPHONE_LOCATION, teleph, True)
         self.click(basic_locators.SAVE_INFO_LOCATION)

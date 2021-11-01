@@ -15,14 +15,14 @@ def config(request):
     return {'browser': browser, 'url': url}
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope='function')
 def driver(config):
 
     browser = config['browser']
     url = config['url']
 
     if browser == 'chrome':
-        browser = webdriver.Chrome(executable_path='C:/Users/Даша/Desktop/mail/maiil/maiil/chromedriver.exe')
+        browser = webdriver.Chrome(executable_path='/home/dashori/chromedriver')
     else:
         raise RuntimeError(f'Unsupported browser: {browser}')
 
