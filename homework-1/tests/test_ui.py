@@ -2,7 +2,6 @@ from base import BaseCase
 from ui.locators import basic_locators
 from data import *
 import pytest
-import time
 
 
 @pytest.mark.UI

@@ -24,9 +24,6 @@ class BaseCase:
     def find(self, locator, delay=50):
         return self.wait(delay).until(ec.visibility_of_element_located(locator))
 
-    def search(self, query):
-        search = self.find(query)
-        return search
 
     def send_element(self, locator: tuple, query: str, is_clear: bool = False):
         element = self.find(locator)
