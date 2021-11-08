@@ -3,7 +3,6 @@ import faker
 
 from api.client import ApiClient
 
-
 fake = faker.Faker()
 
 EMAIL = 'daahaaa@icloud.com'
@@ -25,7 +24,7 @@ class TestApi:
         assert segment_id in self.client.get_all_segments()
         self.client.delete_segment(segment_id)
 
-    # @pytest.mark.API
+    @pytest.mark.API
     def test_segment_delete(self, login):
         name = str(fake.bothify(text='???? ##?'))
         segment_id = self.client.create_segment(name)
