@@ -3,13 +3,13 @@ from data import *
 from ui.fixtures import *
 import pytest
 import random
+import faker
+fake = faker.Faker()
 
 @pytest.mark.UI
 class TestAuthorization(BaseCase):
     
-    # @pytest.mark.skip()
     authorize = False
-    # @pytest.mark.skip()
     @pytest.mark.parametrize(
         "email, password",
         [
@@ -25,24 +25,23 @@ class TestAuthorization(BaseCase):
         self.login_page.login(email, password)
         assert self.driver.current_url != DASHBOARD_URL
 
-# @pytest.mark.skip()
 class TestSegment(BaseCase):
     authorize = True
 
     @pytest.mark.UI
-    # @pytest.mark.skip()
     def test_add_segment(self):
         segments_page = self.dashboard_page.go_to_auditorium()
-        segment_name = 'Dasha' + str(random.randint(0, 100))
+        segment_name = str(fake.bothify(text='#????##?'))
         segments_page.add_segment(segment_name)
 
         assert segments_page.new_segment(segment_name)
+        segments_page.remove_segment()
 
-    # @pytest.mark.skip()        
+
     @pytest.mark.UI
     def test_del_segment(self):
         segments_page = self.dashboard_page.go_to_auditorium()
-        segment_name = 'Dasha' + str(random.randint(0, 100))
+        segment_name = str(fake.bothify(text='#????##?'))
         segments_page.add_segment(segment_name)
         assert segments_page.new_segment(segment_name)
 
@@ -53,12 +52,13 @@ class TestSegment(BaseCase):
 
 
 class TestCampaigns(BaseCase):
-    # @pytest.mark.skip()
-    
+
+    authorize = True
+        
     @pytest.mark.UI
     def test_add_campaign(self):
         
-        campaign_name = 'Dasha' + str(random.randint(0, 100))
+        campaign_name = str(fake.bothify(text='????##?'))
         campaign_page = self.dashboard_page.go_to_campaign()
         campaign_page.add_campaign(campaign_name)
 

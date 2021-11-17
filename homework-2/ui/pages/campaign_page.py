@@ -1,10 +1,10 @@
 from ui.pages.base_page import BasePage
+from ui.fixtures import *
 from ui.locators.basic_locators import CampaignLocators
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 
 import os
-
 
 class CampaignPage(BasePage):
     
@@ -14,14 +14,15 @@ class CampaignPage(BasePage):
 
     def add_campaign(self, campaign_name):
         target_url = 'lamoda.ru'
-        image_path = os.path.join(os.path.dirname(__file__), 'photo.png')
+        repo_root = os.path.abspath(os.path.join(__file__, os.path.pardir))
+        image_path = os.path.join(repo_root, 'photo.png')
 
         self.click(self.locators.СOVERAGE_TYPE_LOCATOR)
         self.send_element(self.locators.URL_LOCATOR, target_url)
         self.send_element(self.locators.TITLE_INPUT_LOCATOR, campaign_name, True)
         self.click(self.locators.BANNER_LOCATOR)
         self.click(self.locators.AUTO_LOCATOR)
-        self.find_presence(self.locators.IMAGE_INPUT_LOCATOR).send_keys(image_path)
+        self.find(self.locators.IMAGE_INPUT_LOCATOR).send_keys(image_path)
         self.click(self.locators.IMAGE_SUBMIT_LOCATOR)
         self.click(self.locators.CREATE_CAMPAIGN_LOCATOR)
 
@@ -32,3 +33,5 @@ class CampaignPage(BasePage):
             return True
         except TimeoutException:
             return False
+
+    

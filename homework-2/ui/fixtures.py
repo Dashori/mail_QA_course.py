@@ -1,4 +1,5 @@
 import pytest
+import os
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
@@ -50,7 +51,7 @@ def get_driver(browser_name, download_dir=None):
 def driver(config, temp_dir):
     url = config['url']
     
-    browser = get_driver('chrome', download_dir=temp_dir)
+    browser = get_driver('chrome')# , download_dir=temp_dir)
     browser.get(url)
 
     yield browser
@@ -76,3 +77,6 @@ def cookies(credentials, config):
     driver.quit()
     return cookies
 
+@pytest.fixture()
+def files_path(repo_root):
+    return os.path.join(repo_root, 'files')

@@ -9,7 +9,7 @@ CLICK_RETRY = 3
 
 class BaseCase:
 
-    authorize = True
+    authorize = False
 
     @pytest.fixture(scope='function', autouse=True)
     def setup(self, driver, config, request: FixtureRequest):
@@ -25,9 +25,4 @@ class BaseCase:
                 self.driver.add_cookie(cookie)
 
             self.driver.refresh()
-            self.dashboard_page = DashboardPage(driver)
-
-        
-
-   
   
