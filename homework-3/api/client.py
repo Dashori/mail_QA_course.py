@@ -1,6 +1,6 @@
 import requests
 from urllib.parse import urljoin
-from api.data import payload_segment
+from api.data import payload_segment, payload_campaign
 from api.exceptions import *
 
 class ApiClient:
@@ -29,16 +29,16 @@ class ApiClient:
             raise CSRFTokenNotSetException('No CSRF Token set for this client')
         return token
 
-    def get_csrf_token(self) -> None:
-        location = 'csrf/'
-        self._request('GET', location, jsonify=False)
+    def get_csrf_token(self):
+        self._request('GET', 'csrf/', jsonify=False)
+        return self.session.cookies.get('csrftoken')
 
     def post_login(self, email, password):
         location = 'https://auth-ac.my.com/auth'
        
         headers = {
             'Content-Type': 'application/x-www-form-urlencoded',
-            'Referer': 'https://target.my.com/'
+            'Referer': self.base_url
         }
         data = {
             'email': email,
@@ -47,7 +47,7 @@ class ApiClient:
             'failure': 'https://account.my.com/login/'
         }
         self._request('POST', location, expected_status=200, headers=headers, data=data, jsonify=False, fullpath=True)
-        self.get_csrf_token()
+        return self.get_csrf_token()
 
     def create_segment(self, name):
         location = 'api/v2/remarketing/segments.json'
@@ -67,10 +67,7 @@ class ApiClient:
 
         location = '/api/v2/campaigns.json'
 
-        payload = {
-            'name': name_company,
-            'objective': "reach",
-            'package_id': '960'}
+        payload = payload_campaign(name_company)
         headers = {'Content-Type': 'application/json', 'X-CSRFToken': self.csrf_token}
         response = self._request('POST', location, headers=headers, json=payload)
         return response['id']
@@ -82,12 +79,14 @@ class ApiClient:
         self._request('DELETE', location, expected_status = 204, headers=headers, jsonify = False)
 
     def get_all_segments(self):
-        location = 'api/v2/remarketing/segments.json'
+    
+        location = "api/v2/remarketing/segments.json?fields=id&limit=100&"
         segments_json = self._request('GET', location)
         return [i['id'] for i in segments_json['items']]
 
     def get_all_campaign(self):
-        location = 'api/v2/campaigns.json?fields=id%2Cpackage_id%2Cuser_id&sorting=-id&limit=10&offset=0&'
+
+        location = 'api/v2/campaigns.json?fields=id&sorting=-id&limit=100&'
         campaign_json = self._request('GET', location)
         return [i['id'] for i in campaign_json['items']]
 

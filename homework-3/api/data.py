@@ -13,4 +13,8 @@ def payload_segment(segment_name):
                     'left': 365,
                     'right': 0}}]}
 
-                    
+def payload_campaign(name_company):
+    return {
+            'name': name_company,
+            'objective': 'reach',
+            'package_id': '960'}
