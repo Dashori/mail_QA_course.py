@@ -1,15 +1,7 @@
 import requests
 from urllib.parse import urljoin
-
-
-class ResponseErrorException(Exception):
-    pass
-
-class ResponseStatusCodeException(Exception):
-    pass
-
-class CSRFTokenNotSetException(Exception):
-    pass
+from api.data import payload_segment
+from api.exceptions import *
 
 class ApiClient:
 
@@ -59,19 +51,7 @@ class ApiClient:
 
     def create_segment(self, name):
         location = 'api/v2/remarketing/segments.json'
-        
-        payload = {    
-                'name': name,
-                'pass_condition': 1,
-                'relations': [
-                    {'object_type': 'remarketing_player',
-                    'params': 
-                    {
-                        'type': 'positive',
-                        'left': 365,
-                        'right': 0}}]
-
-                    }
+        payload = payload_segment(name)
         headers = {'Content-Type': 'application/json',
                    'X-CSRFToken': self.csrf_token}
         response = self._request('POST', location, headers=headers, json=payload)
