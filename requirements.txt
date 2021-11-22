@@ -7,3 +7,5 @@ python-debian===0.1.36ubuntu1
 py==1.10.0
 selenium==4.0.0
 webdriver-manager==3.5.1
+SQLAlchemy==1.4.27
+
