@@ -13,13 +13,17 @@ f_in.seek(0)
 
 ##Общее количество запросов по типам
 
-request = {'GET' : 0, 'HEAD' :0 , 'POST' : 0, 'PUT' : 0}
+request = {}
 
 for i in range(n):
     line = f_in.readline().split()[5:6][0].strip("\"")
     if (len(line) > 6):
         continue
-    request[str(line)] += 1
+    if (str(line) not in request):
+        request[str(line)] = 1
+    else:
+        request[str(line)] += 1
+
 
 f_out.write("\n\nОбщее количество запросов по типам:\n")
 for key,value in request.items():
