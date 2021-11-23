@@ -78,16 +78,23 @@ class ApiClient:
                    'X-CSRFToken': self.csrf_token}
         self._request('DELETE', location, expected_status = 204, headers=headers, jsonify = False)
 
-    def get_all_segments(self):
+    def get_all_segments(self, id):
     
         location = "api/v2/remarketing/segments.json?fields=id&limit=100&"
         segments_json = self._request('GET', location)
-        return [i['id'] for i in segments_json['items']]
+        for i in segments_json['items']:
+            if i['id'] == id:
+                return 0
+        return 1
 
-    def get_all_campaign(self):
+    def get_all_campaign(self, id):
 
         location = 'api/v2/campaigns.json?fields=id&sorting=-id&limit=100&'
         campaign_json = self._request('GET', location)
-        return [i['id'] for i in campaign_json['items']]
+        for i in campaign_json['items']:
+            if i['id'] == id:
+                return 0
+        return 1
+        
 
 
