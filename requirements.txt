@@ -10,4 +10,6 @@ selenium==4.0.0
 faker==9.8.0
 webdriver-manager==3.5.1
 flask==2.0.2
+SQLAlchemy==1.4.27
+
 
